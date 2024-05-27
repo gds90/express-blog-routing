@@ -1,6 +1,7 @@
 const path = require('path');
 let posts = require('../db.js')
 
+// index
 const index = (req, res) => {
     res.format({
         html: () => {
@@ -12,12 +13,11 @@ const index = (req, res) => {
                     <img width="500" src="imgs/posts/${post.image}" alt="${post.title}">
                     <p>${post.content}</p>
                     <h4>Tags:</h4>
-                    <ul>`;
+                    `;
                 post.tags.forEach(tag => {
-                    html += `<li>${tag}</li>`;
-                    // <span class="tag">#${tag.toLowerCase().replaceAll(' ', '-')}</span>`).join(' ')}
+                    html += `<span class="tag">#${tag.toLowerCase().replaceAll(' ', '-')} </span>`;
                 });
-                html += `</ul>
+                html += `
                 </article>
                 </a>
                 <hr>`;
@@ -35,17 +35,39 @@ const index = (req, res) => {
     })
 }
 
+// show
 const show = (req, res) => {
     const slugPost = req.params.slug;
     const postRichiesto = posts.find(post => post.slug === slugPost);
 
     if (postRichiesto) {
-        res.json({
-            ...postRichiesto,
-            description: 'Post richiesto',
-            image_url: `http://${req.headers.host}/imgs/posts/${postRichiesto.image}`,
-            image_download_url: `http://${req.headers.host}/posts/${postRichiesto.slug}/download`
-        });
+        res.format({
+            html: () => {
+                let html = `<main>`;
+                html += `
+                <article>
+                <h2>${postRichiesto.title}</h2>
+                <img width="500" src="imgs/posts/${postRichiesto.image}" alt="${postRichiesto.title}">
+                <p>${postRichiesto.content}</p>
+                <h4>Tags:</h4>`;
+                postRichiesto.tags.forEach(tag => {
+                    html += `<span class="tag">#${tag.toLowerCase().replaceAll(' ', '-')} </span>`;
+                });
+                html += `
+                    </article>
+                    <hr>`;
+                html += '</main>';
+                res.send(html);
+            },
+            json: () => {
+                res.json({
+                    ...postRichiesto,
+                    description: 'Post richiesto',
+                    image_url: `http://${req.headers.host}/imgs/posts/${postRichiesto.image}`,
+                    image_download_url: `http://${req.headers.host}/posts/${postRichiesto.slug}/download`
+                });
+            }
+        })
     } else {
         res.status(404).json({
             error: 'Post non trovato'
@@ -53,6 +75,7 @@ const show = (req, res) => {
     }
 }
 
+// create
 const create = (req, res) => {
     res.format({
         html: () => {
@@ -64,6 +87,7 @@ const create = (req, res) => {
     });
 }
 
+// download immagine
 const download = (req, res) => {
     const slugPost = req.params.slug;
     const postRichiesto = posts.find(post => post.slug === slugPost);
