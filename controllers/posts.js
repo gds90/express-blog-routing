@@ -47,7 +47,7 @@ const show = (req, res) => {
                 html += `
                 <article>
                 <h2>${postRichiesto.title}</h2>
-                <img width="500" src="imgs/posts/${postRichiesto.image}" alt="${postRichiesto.title}">
+                <img width="500" src="/imgs/posts/${postRichiesto.image}" alt="${postRichiesto.title}">
                 <p>${postRichiesto.content}</p>
                 <h4>Tags:</h4>`;
                 postRichiesto.tags.forEach(tag => {
@@ -63,8 +63,8 @@ const show = (req, res) => {
                 res.json({
                     ...postRichiesto,
                     description: 'Post richiesto',
-                    image_url: `http://${req.headers.host}/imgs/posts/${postRichiesto.image}`,
-                    image_download_url: `http://${req.headers.host}/posts/${postRichiesto.slug}/download`
+                    image_url: `${req.protocol}://${req.headers.host}/imgs/posts/${postRichiesto.image}`,
+                    image_download_url: `${req.protocol}://${req.headers.host}/posts/${postRichiesto.slug}/download`
                 });
             }
         })
