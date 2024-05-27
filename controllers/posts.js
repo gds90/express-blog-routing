@@ -10,7 +10,7 @@ const index = (req, res) => {
                 html += `
                 <article>
                     <a href="/posts/${post.slug}"><h2>${post.title}</h2></a>
-                    <img width="500" src="imgs/posts/${post.image}" alt="${post.title}">
+                    <img width="500" src="/imgs/posts/${post.image}" alt="${post.title}">
                     <p>${post.content}</p>
                     <h4>Tags:</h4>
                     `;
